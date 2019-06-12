@@ -12,7 +12,7 @@ else
     # Fedora: sudo dnf install redhat-lsb-core
     # OpenSUSE: sudo zypper install lsb-core
     # Arch: pacman -Syu lsb-release
-    exit(0)
+    exit 0
 fi
 
 # Will need to either shorten the OS variable to major system versions
