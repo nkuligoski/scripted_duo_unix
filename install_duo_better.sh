@@ -1,12 +1,15 @@
 #!/usr/bin/bash
 # Purpose: Help administrators install Duo on Ubuntu 14.04, 16.04, or 18.04
 
-get_operating_system () {
-	hostnamectl | sed -n -e 's/^.*Operating System: //p' 
-}
-
 # Capture Operating System
-OS=$(get_operating_system)
+if lsb_release > /dev/null 2>&1 ; then
+    read OS <<< $(lsb_release -d | awk '/Description/')
+    echo "{$OS}"
+else
+    echo "lsb_release package required to proceed"
+    # Centos/Redhat - redhat-lsb-core
+    # Ubuntu - sb-core
+fi
 
 # Install pam_duo prerequisites
 # Download and extract the latest version of duo_unix
