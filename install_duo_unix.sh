@@ -17,8 +17,10 @@ fi
 
 # Will need to either shorten the OS variable to major system versions
 # or use regex in the if statement so that it doesnt care about the minor version
-if [ "$OS" =~ "Ubuntu 16.04.6 LTS" ]; then
+if [ "$OS" = "Ubuntu 16.04.6 LTS" ]; then
 	echo "Call 'ubuntu_duo' script"
+elif [ "$OS" = "CentOS" ]; then
+	echo "Call 'centos_duo' script"
 else
 	echo "Couldn't match on an OS"
 fi
