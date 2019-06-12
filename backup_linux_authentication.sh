@@ -1,5 +1,6 @@
 #!/usr/bin/bash
 # Purpose: Backup Linux authentication config
+
 echo "This script will backup the system files used for authentication."
 
 sleep 5
