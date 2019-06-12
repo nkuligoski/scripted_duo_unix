@@ -3,7 +3,7 @@
 
 # Capture Operating System
 if [ lsb_release > /dev/null 2>&1 ]; then
-    read OS <<< $(lsb_release -d | awk '/Description/')
+    read OS <<< $(lsb_release -d | awk '{ print $2,$3 }')
     echo "$OS"
 else
     echo "'lsb_release' package required to proceed"
@@ -15,9 +15,7 @@ else
     exit 0
 fi
 
-# Will need to either shorten the OS variable to major system versions
-# or use regex in the if statement so that it doesnt care about the minor version
-if [ "$OS" = "Ubuntu 16.04.6 LTS" ]; then
+if [ "$OS" = "Ubuntu 16.04.6" ]; then
 	echo "Call 'ubuntu_duo' script"
 elif [ "$OS" = "CentOS" ]; then
 	echo "Call 'centos_duo' script"
