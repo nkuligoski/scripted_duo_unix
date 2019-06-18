@@ -1,6 +1,14 @@
 #!/usr/bin/bash
 # Purpose: Configure Ubuntu with primary authentication (pubkey or password) + Duo
 
+# Print variables passed with script
+echo "Integration key: $1"
+echo "Secret key: $2"
+echo "API Hostname: $3"
+
+echo "Would you like to continue? [yes/no]"
+read continue
+
 # Install pam_duo prerequisites
 echo "Installing pam_duo prerequisites"
 sudo apt install libssl-dev libpam-dev gcc

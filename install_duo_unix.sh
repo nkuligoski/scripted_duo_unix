@@ -28,7 +28,7 @@ if [ "$OS" = "Ubuntu 16.04.6" ]; then
 	echo "Call 'ubuntu_duo' script (pass in Duo keys)"
 
 	# Duo script 
-	bash ubuntu_duo.sh $integration_key $secret_key $api_hostname
+	bash systems/ubuntu_duo.sh $integration_key $secret_key $api_hostname
 elif [ "$OS" = "CentOS" ]; then
 	echo "Call 'centos_duo' script"
 else
