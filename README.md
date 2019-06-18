@@ -14,6 +14,6 @@ Make it easier for administrators to integrate Duo to their Linux systems.
 6. PubKey + Duo or Password + Duo?
 7. Configure /etc/pam.d/ appropriately
 
-### How to use
-1. Please utilize the `backup_linux_authentication.sh` script to backup.
+### Usage
+1. Please utilize the `backup_linux_authentication.sh` script to backup first.
 2. Run install_duo_unix.sh and follow the prompts.
