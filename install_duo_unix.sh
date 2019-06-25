@@ -12,8 +12,8 @@ read api_hostname
 
 # Capture Operating System
 if [ lsb_release > /dev/null 2>&1 ]; then
-    read OS <<< $(lsb_release -d | awk '{ print $2,$3 }')
-    echo "Detected: $OS"
+    read os <<< $(lsb_release -d | awk '{ print $2,$3 }')
+    echo "Detected: $os"
 else
     echo "'lsb_release' package required to proceed"
     # Centos/Redhat: sudo yum install redhat-lsb-core
@@ -24,12 +24,10 @@ else
     exit 0
 fi
 
-if [ "$OS" = "Ubuntu 16.04.6" ]; then
-	echo "Call 'ubuntu_duo' script (pass in Duo keys)"
-
-	# Duo script 
-	bash systems/ubuntu_duo.sh $integration_key $secret_key $api_hostname
-elif [ "$OS" = "CentOS" ]; then
+if [ "$os" = "Ubuntu 16.04.6" ]; then
+	echo "Calling 'ubuntu_duo' script. Sending along Duo keys and OS version."
+	bash systems/ubuntu_duo.sh $integration_key $secret_key $api_hostname $os
+elif [ "$os" = "CentOS" ]; then
 	echo "Call 'centos_duo' script"
 else
 	echo "Couldn't match on an OS"
