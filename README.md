@@ -16,4 +16,6 @@ Make it easier for administrators to integrate Duo to their Linux systems.
 
 ### Usage
 1. Please utilize the `backup_linux_authentication.sh` script to backup first.
-2. Run install_duo_unix.sh and follow the prompts.
+2. On your Linux machine, run: `git pull https://github.com/nkuligoski/scripted_duo_unix.git`
+3. Change into the `scripted_duo_unix` folder.
+4. Run install_duo_unix.sh and follow the prompts.
