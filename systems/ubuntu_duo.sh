@@ -38,16 +38,17 @@ if [ "$continue" = "yes" ]; then
 	if [ -f /etc/duo/pam_duo.conf ]; then
 
 		# Check for integration key, secret key and hostname
-		keys_check=`sudo grep "$ikey\|$skey\|$host" /etc/duo/pam_duo.conf`
+		keys_check=`sudo grep '$ikey\|$skey\|$host' /etc/duo/pam_duo.conf`
 		if [ "$keys_check" = "" ]; then
 			echo "Configuring /etc/duo/pam_duo.conf with your Duo keys"
-			sudo sed -i "s/^ikey = .*/ikey = $1/" /etc/duo/pam_duo.conf
-			sudo sed -i "s/^skey = .*/skey = $2/" /etc/duo/pam_duo.conf
-			sudo sed -i "s/^host = .*/host = $3/" /etc/duo/pam_duo.conf
+			sudo sed -i 's/^ikey = .*/ikey = $1/' /etc/duo/pam_duo.conf
+			sudo sed -i 's/^skey = .*/skey = $2/' /etc/duo/pam_duo.conf
+			sudo sed -i 's/^host = .*/host = $3/' /etc/duo/pam_duo.conf
 			sudo cat /etc/duo/pam_duo.conf
 		else
-			echo "Looking like /etc/duo/pam_duo.conf is configured correctly"
+			echo "/etc/duo/pam_duo.conf is configured correctly"
 			# sudo cat /etc/duo/pam_duo.conf
+		fi
 	else
 		echo "File not found. Did ./configure fail?"
 	fi
