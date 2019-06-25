@@ -135,15 +135,31 @@ if [ "$continue" = "yes" ]; then
 				sudo bash -c "UseDNS no" >> /etc/ssh/sshd_config
 			fi
 
-			# Configure /etc/pam.d/
+			# Configure /etc/pam.d/sshd
 			# Required: All remaining modules are run, but the request will be denied if the required module fails.
 			# Requisite: On failure, no remaining modules are run. On success, we keep going.
 			# Sufficient: If no previously required modules failed, then on success we stop right away and 
 			# return pass. If failure we keep going. Failure is not imminent though. If all required modules 
 			# after this one pass the stack may pass.
 
-			echo "Configuring pam.d files for $authentication"
-			
+			# Some logic to determine if pam_duo.so is in /lib64/security/ or /lib/security
+
+			common_auth=`sudo grep common-auth /etc/pam.d/sshd`
+			if [ "$common_auth" = "@include common-auth" ]; then
+				# Comment out: @include common-auth
+				sudo sed -i "s/@include common-auth/#@include common-auth/" /etc/pam.d/sshd
+				# Add Duo lines
+				sudo sed -i '/#@include common-auth/a auth  [success=1 default=ignore] /lib64/security/pam_duo.so' /etc/pam.d/sshd
+				sudo sed -i '/pam_duo.so/a auth  requisite pam_deny.so' /etc/pam.d/sshd
+				sudo sed -i '/pam_deny.so/a auth  required pam_permit.so' /etc/pam.d/sshd
+			elif [ "$common_auth" = "#@include common-auth" ]; then
+				echo "Line in /etc/pam.d/sshd already commented out."
+			else
+				echo "Could not find @include common-auth"
+			fi
+
+
+			echo "Configuring pam.d files for $authentication authentication"
 
 			break
 		elif [ "$authentication" = "password" ]; then
@@ -153,7 +169,9 @@ if [ "$continue" = "yes" ]; then
 			echo "Please enter 'public-key' or 'password'"
 		fi
 	done
-	
+
+	echo "Time to test! Please do not close your current SSH session. Instead, open a new window and sign in."
+
 elif [ "$continue" = "no" ]; then
 	echo "Exiting"
 	exit 0
