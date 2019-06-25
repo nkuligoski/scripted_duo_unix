@@ -12,7 +12,7 @@ read continue
 if [ "$continue" = "yes" ]; then
 	# Install pam_duo prerequisites
 	echo "Installing pam_duo prerequisites"
-	sudo apt install libssl-dev libpam-dev gcc
+	sudo apt install libssl-dev libpam-dev build-essential
 
 	# Download and extract the latest version of duo_unix
 	# Check to see if this has already been downloaded (assumes home folder)
