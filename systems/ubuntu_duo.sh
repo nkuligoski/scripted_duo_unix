@@ -61,11 +61,15 @@ if [ "$continue" = "yes" ]; then
 		if [ "$authentication" = "public-key" ]; then
 			echo "Configuring machine for public-key + Duo"
 
-			# Check PubkeyAuthentication parameters in /etc/ssh/sshd_config
+			# Create variables to check sshd_config parameters against
 			pubkey_authentication=`sudo grep PubkeyAuthentication /etc/ssh/sshd_config`
 			password_authentication=`sudo grep PasswordAuthentication /etc/ssh/sshd_config`
 			authentication_methods=`sudo grep AuthenticationMethods /etc/ssh/sshd_config`
+			use_pam=`sudo grep UsePAM /etc/ssh/sshd_config`
+			challenge_response=`sudo grep ChallengeResponseAuthentication /etc/ssh/sshd_config`
+			use_dns=`sudo grep UseDNS /etc/ssh/sshd_config`
 
+			# Check PubkeyAuthentication parameter in /etc/ssh/sshd_config
 			if [ "$pubkey_authentication" = "PubkeyAuthentication yes" ]; then 
 				echo "PubkeyAuthentication parameter set correctly."; 
 			else 
@@ -76,7 +80,7 @@ if [ "$continue" = "yes" ]; then
 				sudo bash -c "PubkeyAuthentication yes" >> /etc/ssh/sshd_config
 			fi
 
-			# Check PasswordAuthentication parameters in /etc/ssh/sshd_config
+			# Check PasswordAuthentication parameter in /etc/ssh/sshd_config
 			if [ "$password_authentication" = "PasswordAuthentication no" ]; then
 				echo "PasswordAuthentication parameter set correctly."
 			else
@@ -87,7 +91,7 @@ if [ "$continue" = "yes" ]; then
 				sudo bash -c "PasswordAuthentication no" >> /etc/ssh/sshd_config
 			fi
 
-			# Check AuthenticationMethods parameters in /etc/ssh/sshd_config
+			# Check AuthenticationMethods parameter in /etc/ssh/sshd_config
 			if [ "$authentication_methods" = "AuthenticationMethods publickey,keyboard-interactive" ]; then
 				echo "AuthenticationMethods parameter set correctly."
 			else
@@ -98,6 +102,49 @@ if [ "$continue" = "yes" ]; then
 				sudo bash -c "AuthenticationMethods publickey,keyboard-interactive" >> /etc/ssh/sshd_config
 			fi
 
+			# Check UsePAM parameter in /etc/ssh/sshd_config
+			if [ "$use_pam" = "UsePAM yes" ]; then
+				echo "UsePAM parameter set correctly."
+			else
+				# Try to remove UsePAM line, then
+				sudo sed -i '/UsePAM/d' /etc/ssh/sshd_config
+				# Append what we need to end of file
+				echo "Replacing UsePAM"
+				sudo bash -c "UsePam yes" >> /etc/ssh/sshd_config
+			fi
+
+			# Check ChallengeResponseAuthentication parameter in /etc/ssh/sshd_config
+			if [ "$challenge_response" = "ChallengeResponseAuthentication yes" ]; then
+				echo "ChallengeResponseAuthentication parameter set correctly."
+			else
+				# Try to remove UseDNS line, then
+				sudo sed -i '/ChallengeResponseAuthentication/d' /etc/ssh/sshd_config
+				# Append what we need to end of file
+				echo "Replacing ChallengeResponseAuthentication"
+				sudo bash -c "ChallengeResponseAuthentication yes" >> /etc/ssh/sshd_config
+			fi
+
+			# Check UseDNS parameter in /etc/ssh/sshd_config
+			if [ "$use_dns" = "UseDNS no" ]; then
+				echo "UseDNS parameter set correctly."
+			else
+				# Try to remove UseDNS line, then
+				sudo sed -i '/UseDNS/d' /etc/ssh/sshd_config
+				# Append what we need to end of file
+				echo "Replacing UseDNS"
+				sudo bash -c "UseDNS no" >> /etc/ssh/sshd_config
+			fi
+
+			# Configure /etc/pam.d/
+			# Required: All remaining modules are run, but the request will be denied if the required module fails.
+			# Requisite: On failure, no remaining modules are run. On success, we keep going.
+			# Sufficient: If no previously required modules failed, then on success we stop right away and 
+			# return pass. If failure we keep going. Failure is not imminent though. If all required modules 
+			# after this one pass the stack may pass.
+
+			echo "Configuring pam.d files for $authentication"
+			
+
 			break
 		elif [ "$authentication" = "password" ]; then
 			echo "Configuring machine for password + Duo"
@@ -106,15 +153,6 @@ if [ "$continue" = "yes" ]; then
 			echo "Please enter 'public-key' or 'password'"
 		fi
 	done
-
-	# Configure /etc/pam.d/
-	# Required: All remaining modules are run, but the request will be denied if the required module fails.
-	# Requisite: On failure, no remaining modules are run. On success, we keep going.
-	# Sufficient: If no previously required modules failed, then on success we stop right away and 
-	# return pass. If failure we keep going. Failure is not imminent though. If all required modules 
-	# after this one pass the stack may pass.
-
-	echo "Configuring pam.d files for $authentication"
 	
 elif [ "$continue" = "no" ]; then
 	echo "Exiting"
