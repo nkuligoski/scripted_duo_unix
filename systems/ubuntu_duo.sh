@@ -24,7 +24,7 @@ if [ "$continue" = "yes" ]; then
 	fi
 
 	echo "Extracting duo_unix"
-	tar zxf ~/duo_unix-latest.tar.gz
+	tar zxf ~/duo_unix-latest.tar.gz -C ~/
 
 	echo "Changing into duo_unix directory"
 	cd ~/duo_unix-*
