@@ -248,22 +248,9 @@ if [ "$continue" = "yes" ]; then
 			sudo service sshd restart
 
 			# Configuring PAM with Duo
-			# common_auth=`sudo grep pam_unix.so /etc/pam.d/common-auth`
-			# MUST USE REGEX
-			# if [ "$common_auth" != "" ]; then
-			# 	echo "Configuring /etc/pam.d/sshd with pam_duo.so"
-
-			# 	# Comment out existing auth line: auth [success=1 default=ignore] pam_unix.so nullok_secure
-			# 	sudo sed -i "s/auth    [success=1 default=ignore]      pam_unix.so nullok_secure/a #auth [success=1 default=ignore] pam_unix.so nullok_secure/" /etc/pam.d/common-auth
-
-			# 	# Add Duo lines
-			# 	sudo sed -i "/#auth [success=1 default=ignore] pam_unix.so nullok_secure/a auth  requisite pam_unix.so nullok_secure/" /etc/pam.d/common-auth
-			# 	sudo sed -i "/auth  requisite pam_unix.so nullok_secure/a /lib64/security/pam_duo.so/" /etc/pam.d/common-auth
-			# elif [ "$common_auth" = "#auth	[success=1 default=ignore]	pam_unix.so nullok_secure" ]; then
-			# 	echo "Line in /etc/pam.d/sshd already commented out."
-			# else
-			# 	echo "Could not find: auth [success=1 default=ignore] pam_unix.so nullok_secure"
-			# fi
+			echo "Configuring /etc/pam.d/sshd with pam_duo.so"
+			# Comment out existing auth line: auth [success=1 default=ignore] pam_unix.so nullok_secure
+			sudo sed -i $"s/.*pam_unix.so.*/#auth [success=1 default=ignore] pam_unix.so nullok_secure\\nauth requisite pam_unix.so nullok_secure\\nauth [success=1 default=ignore] \/lib64\/security\/pam_duo.so/" /etc/pam.d/common-auth
 
 			break
 		else
