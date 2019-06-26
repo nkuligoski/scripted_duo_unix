@@ -33,11 +33,10 @@ if [ "$continue" = "yes" ]; then
 	cd ~/duo_unix-*
 
 	# Build and install duo_unix with PAM support
-	echo "Building and installing duo_unix with PAM support"
-	
-	if [ -f ~/duo_unix-*/configure ]; then
+	if [ -d /lib64/security ]; then
 		echo "pam_duo already configured."
 	else
+		echo "Building and installing duo_unix with PAM support"
 		./configure --with-pam --prefix=/usr && make && sudo make install
 	fi
 
@@ -256,6 +255,7 @@ if [ "$continue" = "yes" ]; then
 
 			# Configuring PAM with Duo
 			# common_auth=`sudo grep pam_unix.so /etc/pam.d/common-auth`
+			# MUST USE REGEX
 			# if [ "$common_auth" != "" ]; then
 			# 	echo "Configuring /etc/pam.d/sshd with pam_duo.so"
 
