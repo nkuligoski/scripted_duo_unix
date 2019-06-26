@@ -18,7 +18,7 @@ fi
 
 integration_key=$1
 secret_key=$2
-api_host=$3
+api_hostname=$3
 
 # Capture Operating System
 if [ lsb_release > /dev/null 2>&1 ]; then
@@ -36,7 +36,7 @@ fi
 
 if [[ "$os" =~ (16.04)+ ]]; then
 	echo "Calling 'ubuntu_duo' script. Sending along Duo keys and OS version."
-	bash systems/ubuntu_duo.sh $integration_key $secret_key $api_hostname $os
+	bash systems/ubuntu_duo.sh $integration_key $secret_key $api_hostname
 elif [ "$os" = "CentOS" ]; then
 	echo "Call 'centos_duo' script"
 else
