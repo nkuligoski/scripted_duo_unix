@@ -40,8 +40,9 @@ if [[ "$os" =~ (16.04)+ ]]; then
 elif [[ "$os" =~ (18.04) ]]; then
 	echo "Calling 'ubuntu_duo' script with Duo keys"
 	bash systems/ubuntu_duo.sh $integration_key $secret_key $api_hostname
-elif [ "$os" = "CentOS" ]; then
-	echo "Call 'centos_duo' script"
+elif [[ "$os" =~ (CentOS) ]]; then
+        echo "Call 'centos_duo' script"
+        bash systems/centos_duo.sh $integration_key $secret_key $api_hostname
 else
-	echo "Couldn't match on an OS"
+        echo "Couldn't match on an OS"
 fi
