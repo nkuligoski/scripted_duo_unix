@@ -41,9 +41,9 @@ if [ "$continue" = "yes" ]; then
 		keys_check=`sudo grep '$ikey\|$skey\|$host' /etc/duo/pam_duo.conf`
 		if [ "$keys_check" = "" ]; then
 			echo "Configuring /etc/duo/pam_duo.conf with your Duo keys"
-			sudo sed -i 's/^ikey = .*/ikey = $1/' /etc/duo/pam_duo.conf
-			sudo sed -i 's/^skey = .*/skey = $2/' /etc/duo/pam_duo.conf
-			sudo sed -i 's/^host = .*/host = $3/' /etc/duo/pam_duo.conf
+			sudo sed -i "s/^ikey = .*/ikey = $1/" /etc/duo/pam_duo.conf
+			sudo sed -i "s/^skey = .*/skey = $2/" /etc/duo/pam_duo.conf
+			sudo sed -i "s/^host = .*/host = $3/" /etc/duo/pam_duo.conf
 			sudo cat /etc/duo/pam_duo.conf
 		else
 			echo "/etc/duo/pam_duo.conf is configured correctly"
@@ -147,6 +147,7 @@ if [ "$continue" = "yes" ]; then
 
 			common_auth=`sudo grep common-auth /etc/pam.d/sshd`
 			if [ "$common_auth" = "@include common-auth" ]; then
+				echo "Configuring /etc/pam.d/sshd with pam_duo.so"
 				# Comment out: @include common-auth
 				sudo sed -i "s/@include common-auth/#@include common-auth/" /etc/pam.d/sshd
 				# Add Duo lines
@@ -158,9 +159,6 @@ if [ "$continue" = "yes" ]; then
 			else
 				echo "Could not find @include common-auth"
 			fi
-
-
-			echo "Configuring pam.d files for $authentication authentication"
 
 			break
 		elif [ "$authentication" = "password" ]; then
