@@ -173,7 +173,7 @@ if [ "$continue" = "yes" ]; then
 			echo "Configuring machine for password + Duo"
 
 			# Verify machine is configured for using SSH + password and not SSH + PubKey
-			permit_root_login=`sudo grep PermitRootLogin /etc/ssh/sshd_config`
+			permit_root_login=`sudo grep 'PermitRootLogin prohibit-password' /etc/ssh/sshd_config`
 			pubkey_authentication=`sudo grep PubkeyAuthentication /etc/ssh/sshd_config`
 			password_authentication=`sudo grep PasswordAuthentication /etc/ssh/sshd_config`
 			use_pam=`sudo grep UsePAM /etc/ssh/sshd_config`
@@ -181,7 +181,7 @@ if [ "$continue" = "yes" ]; then
 			use_dns=`sudo grep UseDNS /etc/ssh/sshd_config`
 
 			# PermitRootLogin prohibit-password	(default)
-			if [ "$[permit_root_login]" = "PermitRootLogin yes" ]; then 
+			if [ "$permit_root_login" = "PermitRootLogin yes" ]; then 
 				echo "PermitRootLogin parameter set correctly for password auth."; 
 			else
 				# Remove PermitRootLogin line, then
