@@ -63,7 +63,7 @@ if [ "$continue" = "y" ]; then
 
 	# PubKey + Duo or Password + Duo
 	echo "Which would you like to integrat Duo with?"
-	options=("public-key" "password")
+	options=("public-key" "password" "system-auth")
 	select opt in "${options[@]}"; do
 		case $opt in
 			"public-key")
@@ -245,6 +245,9 @@ if [ "$continue" = "y" ]; then
 				# Comment out existing auth line: auth [success=1 default=ignore] pam_unix.so nullok_secure
 				sudo sed -i $"s/.*pam_unix.so.*/#auth [success=1 default=ignore] pam_unix.so nullok_secure\\nauth requisite pam_unix.so nullok_secure\\nauth [success=1 default=ignore] \/lib64\/security\/pam_duo.so/" /etc/pam.d/common-auth
 			;;
+			"system-auth")
+				echo "Congifuring machine for system-auth + Duo"
+			;; 
 		esac
 		break
 	done
