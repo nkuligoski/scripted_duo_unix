@@ -1,17 +1,21 @@
 #!/usr/bin/bash
 # Purpose: Assist administrators install Duo on CentOS and Ubuntu
 
-echo "This script will walk you through adding Duo MFA to your Unix machine."
-sleep 3
+USAGE="Usage: $0 ikey skey api_host"
 
-echo "Please enter your integration key: "
-read integration_key
+echo "This script will layer Duo on top of your public-key or password authentication"
 
-echo "Please enter your secret key: "
-read secret_key
+if [ "$1" = "" ]; then
+	echo "$USAGE"
+elif [ "$2" = "" ]; then
+	echo "$USAGE"
+elif [ "$3" = "" ]; then
+	echo "$USAGE"
+fi
 
-echo "Please enter your api hostname: "
-read api_hostname
+integration_key=$1
+secret_key=$2
+api_host=$3
 
 # Capture Operating System
 if [ lsb_release > /dev/null 2>&1 ]; then
