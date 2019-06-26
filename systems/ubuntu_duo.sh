@@ -10,6 +10,9 @@ echo "Would you like to continue? [yes/no]"
 read continue
 
 if [ "$continue" = "yes" ]; then
+	# Update apt repos
+	sudo apt update
+
 	# Install pam_duo prerequisites
 	echo "Installing pam_duo prerequisites"
 	sudo apt install libssl-dev libpam-dev build-essential
@@ -51,6 +54,7 @@ if [ "$continue" = "yes" ]; then
 		fi
 	else
 		echo "File not found. Did ./configure fail?"
+		exit 1
 	fi
 
 	# PubKey + Duo or Password + Duo
@@ -135,6 +139,9 @@ if [ "$continue" = "yes" ]; then
 				echo "Replacing UseDNS"
 				echo "UseDNS no" | sudo tee -a /etc/ssh/sshd_config
 			fi
+
+			# Restart SSHD service to pick up changes
+			sudo service sshd restart
 
 			# Configure /etc/pam.d/sshd
 			# Required: All remaining modules are run, but the request will be denied if the required module fails.

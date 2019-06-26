@@ -1,6 +1,9 @@
 #!/usr/bin/bash
 # Purpose: Assist administrators install Duo on CentOS and Ubuntu
 
+echo "This script will walk you through adding Duo MFA to your Unix machine."
+sleep 3
+
 echo "Please enter your integration key: "
 read integration_key
 
@@ -24,11 +27,8 @@ else
     exit 0
 fi
 
-if [ "$os" = "Ubuntu 16.04.6" ]; then
+if [[ "$os" =~ (16.04)+ ]]; then
 	echo "Calling 'ubuntu_duo' script. Sending along Duo keys and OS version."
-	bash systems/ubuntu_duo.sh $integration_key $secret_key $api_hostname $os
-elif [ "$os" = "Ubuntu 16.04.5" ]; then
- 	echo "Calling 'ubuntu_duo' script. Sending along Duo keys and OS version."
 	bash systems/ubuntu_duo.sh $integration_key $secret_key $api_hostname $os
 elif [ "$os" = "CentOS" ]; then
 	echo "Call 'centos_duo' script"
