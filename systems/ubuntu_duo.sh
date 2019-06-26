@@ -191,8 +191,7 @@ if [ "$continue" = "yes" ]; then
 				# Remove PermitRootLogin line, then
 				sudo sed -i '/PermitRootLogin/d' /etc/ssh/sshd_config
 				# Append what we need to end of file
-				echo "Replacing PermitRootLogin"
-				echo "PermitRootLogin yes" | sudo tee -a /etc/ssh/sshd_config
+				echo "Setting 'PermitRootLogin yes' in sshd_config" | sudo tee -a /etc/ssh/sshd_config
 			fi
 
 			# Check PubkeyAuthentication parameter in /etc/ssh/sshd_config
@@ -202,8 +201,7 @@ if [ "$continue" = "yes" ]; then
 				# Remove PubkeyAuthentication line, then
 				sudo sed -i '/PubkeyAuthentication/d' /etc/ssh/sshd_config
 				# Append what we need to end of file
-				echo "Replacing PubkeyAuthentication"
-				echo "PubkeyAuthentication no" | sudo tee -a /etc/ssh/sshd_config
+				echo "Setting 'PubkeyAuthentication no' in sshd_config" | sudo tee -a /etc/ssh/sshd_config
 			fi
 
 			# PasswordAuthentication no (default)
@@ -213,8 +211,7 @@ if [ "$continue" = "yes" ]; then
 				# Remove PasswordAuthentication line, then
 				sudo sed -i '/PasswordAuthentication/d' /etc/ssh/sshd_config
 				# Append what we need to end of file
-				echo "Replacing PasswordAuthentication"
-				echo "PasswordAuthentication yes" | sudo tee -a /etc/ssh/sshd_config
+				echo "Setting 'PasswordAuthentication yes' in sshd_config" | sudo tee -a /etc/ssh/sshd_config
 			fi
 
 			# Check UsePAM parameter in /etc/ssh/sshd_config
@@ -224,8 +221,7 @@ if [ "$continue" = "yes" ]; then
 				# Try to remove UsePAM line, then
 				sudo sed -i '/UsePAM/d' /etc/ssh/sshd_config
 				# Append what we need to end of file
-				echo "Replacing UsePAM"
-				echo "UsePam yes" | sudo tee -a /etc/ssh/sshd_config
+				echo "Setting 'UsePam yes' in sshd_config" | sudo tee -a /etc/ssh/sshd_config
 			fi
 
 			# Check ChallengeResponseAuthentication parameter in /etc/ssh/sshd_config
@@ -235,8 +231,7 @@ if [ "$continue" = "yes" ]; then
 				# Try to remove UseDNS line, then
 				sudo sed -i '/ChallengeResponseAuthentication/d' /etc/ssh/sshd_config
 				# Append what we need to end of file
-				echo "Replacing ChallengeResponseAuthentication"
-				echo "ChallengeResponseAuthentication yes" | sudo tee -a /etc/ssh/sshd_config
+				echo "Setting 'ChallengeResponseAuthentication yes' in sshd_config" | sudo tee -a /etc/ssh/sshd_config
 			fi
 
 			# Check UseDNS parameter in /etc/ssh/sshd_config
@@ -246,8 +241,7 @@ if [ "$continue" = "yes" ]; then
 				# Try to remove UseDNS line, then
 				sudo sed -i '/UseDNS/d' /etc/ssh/sshd_config
 				# Append what we need to end of file
-				echo "Replacing UseDNS"
-				echo "UseDNS no" | sudo tee -a /etc/ssh/sshd_config
+				echo "Setting 'UseDNS no' in sshd_config" | sudo tee -a /etc/ssh/sshd_config
 			fi	
 
 			# Restart SSHD service to pick up changes
