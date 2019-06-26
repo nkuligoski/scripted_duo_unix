@@ -34,6 +34,7 @@ if [ "$continue" = "yes" ]; then
 
 	# Build and install duo_unix with PAM support
 	echo "Building and installing duo_unix with PAM support"
+	# Add logic to skip this if its already been configured
 	./configure --with-pam --prefix=/usr && make && sudo make install
 
 	# Update /etc/duo/pam_duo.conf with IKEY, SKEY, and HOST
@@ -245,6 +246,24 @@ if [ "$continue" = "yes" ]; then
 				echo "Replacing UseDNS"
 				echo "UseDNS no" | sudo tee -a /etc/ssh/sshd_config
 			fi	
+
+			# Restart SSHD service to pick up changes
+			sudo service sshd restart
+
+			# Configuring PAM with Duo
+			common_auth=`sudo grep pam_unix.so /etc/pam.d/sshd`
+			if [ "$common_auth" = "auth	[success=1 default=ignore]	pam_unix.so nullok_secure" ]; then
+				echo "Configuring /etc/pam.d/sshd with pam_duo.so"
+				# Comment out: @include common-auth
+				sudo sed -i "s/auth	[success=1 default=ignore]	pam_unix.so nullok_secure/#auth	[success=1 default=ignore]	pam_unix.so nullok_secure/" /etc/pam.d/sshd
+				# Add Duo lines
+				sudo sed -i '/#auth	[success=1 default=ignore]	pam_unix.so nullok_secure/a auth  requisite pam_unix.so nullok_secure' /etc/pam.d/sshd
+				sudo sed -i '/auth  requisite pam_unix.so nullok_secure /lib64/security/pam_duo.so' /etc/pam.d/sshd
+			elif [ "$common_auth" = "#auth	[success=1 default=ignore]	pam_unix.so nullok_secure" ]; then
+				echo "Line in /etc/pam.d/sshd already commented out."
+			else
+				echo "Could not find @include common-auth"
+			fi
 
 			break
 		else
