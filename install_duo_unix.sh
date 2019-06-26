@@ -35,7 +35,10 @@ else
 fi
 
 if [[ "$os" =~ (16.04)+ ]]; then
-	echo "Calling 'ubuntu_duo' script. Sending along Duo keys and OS version."
+	echo "Calling 'ubuntu_duo' script with Duo keys"
+	bash systems/ubuntu_duo.sh $integration_key $secret_key $api_hostname
+elif [[ "$os" =~ (18.04) ]]; then
+	echo "Calling 'ubuntu_duo' script with Duo keys"
 	bash systems/ubuntu_duo.sh $integration_key $secret_key $api_hostname
 elif [ "$os" = "CentOS" ]; then
 	echo "Call 'centos_duo' script"
