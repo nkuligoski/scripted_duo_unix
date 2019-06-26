@@ -252,12 +252,11 @@ if [ "$continue" = "yes" ]; then
 
 			# Configuring PAM with Duo
 			common_auth=`sudo grep pam_unix.so /etc/pam.d/common-auth`
-			if [ "$common_auth" = "auth [success=1 default=ignore] pam_unix.so nullok_secure" ]; then
+			if [ "$common_auth" != "" ]; then
 				echo "Configuring /etc/pam.d/sshd with pam_duo.so"
 
 				# Comment out existing auth line: auth [success=1 default=ignore] pam_unix.so nullok_secure
 				sudo sed -i "s/auth [success=1 default=ignore] pam_unix.so nullok_secure/a #auth [success=1 default=ignore] pam_unix.so nullok_secure" /etc/pam.d/sshd
-
 
 				# Add Duo lines
 				sudo sed -i "s/#auth [success=1 default=ignore] pam_unix.so nullok_secure/a auth  requisite pam_unix.so nullok_secure" /etc/pam.d/sshd
@@ -265,7 +264,7 @@ if [ "$continue" = "yes" ]; then
 			elif [ "$common_auth" = "#auth	[success=1 default=ignore]	pam_unix.so nullok_secure" ]; then
 				echo "Line in /etc/pam.d/sshd already commented out."
 			else
-				echo "Could not find @include common-auth"
+				echo "Could not find: auth [success=1 default=ignore] pam_unix.so nullok_secure"
 			fi
 
 			break
