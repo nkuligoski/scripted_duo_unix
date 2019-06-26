@@ -259,8 +259,8 @@ if [ "$continue" = "yes" ]; then
 				sudo sed -i "s/auth [success=1 default=ignore] pam_unix.so nullok_secure/a #auth [success=1 default=ignore] pam_unix.so nullok_secure" /etc/pam.d/sshd
 
 				# Add Duo lines
-				sudo sed -i "s/#auth [success=1 default=ignore] pam_unix.so nullok_secure/a auth  requisite pam_unix.so nullok_secure" /etc/pam.d/sshd
-				sudo sed -i "s/auth  requisite pam_unix.so nullok_secure /lib64/security/pam_duo.so:" /etc/pam.d/sshd
+				sudo sed -i "/#auth [success=1 default=ignore] pam_unix.so nullok_secure/a auth  requisite pam_unix.so nullok_secure" /etc/pam.d/sshd
+				sudo sed -i "/auth  requisite pam_unix.so nullok_secure /lib64/security/pam_duo.so:" /etc/pam.d/sshd
 			elif [ "$common_auth" = "#auth	[success=1 default=ignore]	pam_unix.so nullok_secure" ]; then
 				echo "Line in /etc/pam.d/sshd already commented out."
 			else
