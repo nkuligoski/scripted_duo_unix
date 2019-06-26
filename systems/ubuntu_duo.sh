@@ -168,6 +168,7 @@ if [ "$continue" = "y" ]; then
 					else
 						echo "Could not find @include common-auth"
 					fi
+					break
 				;;
 				"password")
 					echo "Configuring machine for password + Duo"
@@ -247,6 +248,7 @@ if [ "$continue" = "y" ]; then
 					echo "Configuring /etc/pam.d/sshd with pam_duo.so"
 					# Comment out existing auth line: auth [success=1 default=ignore] pam_unix.so nullok_secure
 					sudo sed -i $"s/.*pam_unix.so.*/#auth [success=1 default=ignore] pam_unix.so nullok_secure\\nauth requisite pam_unix.so nullok_secure\\nauth [success=1 default=ignore] \/lib64\/security\/pam_duo.so/" /etc/pam.d/common-auth
+					break
 				;;
 			esac
 		done
