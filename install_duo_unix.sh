@@ -7,10 +7,13 @@ echo "This script will layer Duo on top of your public-key or password authentic
 
 if [ "$1" = "" ]; then
 	echo "$USAGE"
+	exit 1
 elif [ "$2" = "" ]; then
 	echo "$USAGE"
+	exit 1
 elif [ "$3" = "" ]; then
 	echo "$USAGE"
+	exit 1
 fi
 
 integration_key=$1
