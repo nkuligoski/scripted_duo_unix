@@ -66,6 +66,8 @@ if [ "$continue" = "yes" ]; then
 		if [ "$authentication" = "public-key" ]; then
 			echo "Configuring machine for public-key + Duo"
 
+			# Verify that the system is configured for pubkey authentication first
+
 			# Create variables to check sshd_config parameters against
 			pubkey_authentication=`sudo grep PubkeyAuthentication /etc/ssh/sshd_config`
 			password_authentication=`sudo grep PasswordAuthentication /etc/ssh/sshd_config`
@@ -166,10 +168,84 @@ if [ "$continue" = "yes" ]; then
 			else
 				echo "Could not find @include common-auth"
 			fi
-
 			break
 		elif [ "$authentication" = "password" ]; then
 			echo "Configuring machine for password + Duo"
+
+			# Verify machine is configured for using SSH + password and not SSH + PubKey
+			permit_root_login=`sudo grep PermitRootLogin /etc/ssh/sshd_config`
+			pubkey_authentication=`sudo grep PubkeyAuthentication /etc/ssh/sshd_config`
+			password_authentication=`sudo grep PasswordAuthentication /etc/ssh/sshd_config`
+			use_pam=`sudo grep UsePAM /etc/ssh/sshd_config`
+			challenge_response=`sudo grep ChallengeResponseAuthentication /etc/ssh/sshd_config`
+			use_dns=`sudo grep UseDNS /etc/ssh/sshd_config`
+
+			# PermitRootLogin prohibit-password	(default)
+			if [ "$[permit_root_login]" = "PermitRootLogin yes" ]; then 
+				echo "PermitRootLogin parameter set correctly for password auth."; 
+			else
+				# Remove PermitRootLogin line, then
+				sudo sed -i '/PermitRootLogin/d' /etc/ssh/sshd_config
+				# Append what we need to end of file
+				echo "Replacing PermitRootLogin"
+				echo "PermitRootLogin yes" | sudo tee -a /etc/ssh/sshd_config
+			fi
+
+			# Check PubkeyAuthentication parameter in /etc/ssh/sshd_config
+			if [ "$pubkey_authentication" = "PubkeyAuthentication no" ]; then 
+				echo "PubkeyAuthentication parameter set correctly for password auth."; 
+			else
+				# Remove PubkeyAuthentication line, then
+				sudo sed -i '/PubkeyAuthentication/d' /etc/ssh/sshd_config
+				# Append what we need to end of file
+				echo "Replacing PubkeyAuthentication"
+				echo "PubkeyAuthentication no" | sudo tee -a /etc/ssh/sshd_config
+			fi
+
+			# PasswordAuthentication no (default)
+			if [ "$password_authentication" = "PasswordAuthentication yes" ]; then 
+				echo "PasswordAuthentication parameter set correctly for password auth."; 
+			else
+				# Remove PasswordAuthentication line, then
+				sudo sed -i '/PasswordAuthentication/d' /etc/ssh/sshd_config
+				# Append what we need to end of file
+				echo "Replacing PasswordAuthentication"
+				echo "PasswordAuthentication yes" | sudo tee -a /etc/ssh/sshd_config
+			fi
+
+			# Check UsePAM parameter in /etc/ssh/sshd_config
+			if [ "$use_pam" = "UsePAM yes" ]; then
+				echo "UsePAM parameter set correctly."
+			else
+				# Try to remove UsePAM line, then
+				sudo sed -i '/UsePAM/d' /etc/ssh/sshd_config
+				# Append what we need to end of file
+				echo "Replacing UsePAM"
+				echo "UsePam yes" | sudo tee -a /etc/ssh/sshd_config
+			fi
+
+			# Check ChallengeResponseAuthentication parameter in /etc/ssh/sshd_config
+			if [ "$challenge_response" = "ChallengeResponseAuthentication yes" ]; then
+				echo "ChallengeResponseAuthentication parameter set correctly."
+			else
+				# Try to remove UseDNS line, then
+				sudo sed -i '/ChallengeResponseAuthentication/d' /etc/ssh/sshd_config
+				# Append what we need to end of file
+				echo "Replacing ChallengeResponseAuthentication"
+				echo "ChallengeResponseAuthentication yes" | sudo tee -a /etc/ssh/sshd_config
+			fi
+
+			# Check UseDNS parameter in /etc/ssh/sshd_config
+			if [ "$use_dns" = "UseDNS no" ]; then
+				echo "UseDNS parameter set correctly."
+			else
+				# Try to remove UseDNS line, then
+				sudo sed -i '/UseDNS/d' /etc/ssh/sshd_config
+				# Append what we need to end of file
+				echo "Replacing UseDNS"
+				echo "UseDNS no" | sudo tee -a /etc/ssh/sshd_config
+			fi	
+
 			break
 		else
 			echo "Please enter 'public-key' or 'password'"
