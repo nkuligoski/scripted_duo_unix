@@ -78,7 +78,7 @@ if [ "$continue" = "yes" ]; then
 				sudo sed -i '/PubkeyAuthentication/d' /etc/ssh/sshd_config
 				# Append what we need to end of file
 				echo "Replacing PubkeyAuthentication"
-				sudo bash -c "PubkeyAuthentication yes" >> /etc/ssh/sshd_config
+				echo "PubkeyAuthentication yes" | sudo tee -a /etc/ssh/sshd_config
 			fi
 
 			# Check PasswordAuthentication parameter in /etc/ssh/sshd_config
@@ -89,7 +89,7 @@ if [ "$continue" = "yes" ]; then
 				sudo sed -i '/PasswordAuthentication/d' /etc/ssh/sshd_config
 				# Append what we need to end of file
 				echo "Replacing PasswordAuthentication"
-				sudo bash -c "PasswordAuthentication no" >> /etc/ssh/sshd_config
+				echo "PasswordAuthentication no" | sudo tee -a /etc/ssh/sshd_config
 			fi
 
 			# Check AuthenticationMethods parameter in /etc/ssh/sshd_config
@@ -100,7 +100,7 @@ if [ "$continue" = "yes" ]; then
 				sudo sed -i '/AuthenticationMethods/d' /etc/ssh/sshd_config
 				# Append what we need to end of file
 				echo "Replacing AuthenticationMethods"
-				sudo bash -c "AuthenticationMethods publickey,keyboard-interactive" >> /etc/ssh/sshd_config
+				echo "AuthenticationMethods publickey,keyboard-interactive" | sudo tee -a /etc/ssh/sshd_config
 			fi
 
 			# Check UsePAM parameter in /etc/ssh/sshd_config
@@ -111,7 +111,7 @@ if [ "$continue" = "yes" ]; then
 				sudo sed -i '/UsePAM/d' /etc/ssh/sshd_config
 				# Append what we need to end of file
 				echo "Replacing UsePAM"
-				sudo bash -c "UsePam yes" >> /etc/ssh/sshd_config
+				echo "UsePam yes" | sudo tee -a /etc/ssh/sshd_config
 			fi
 
 			# Check ChallengeResponseAuthentication parameter in /etc/ssh/sshd_config
@@ -122,7 +122,7 @@ if [ "$continue" = "yes" ]; then
 				sudo sed -i '/ChallengeResponseAuthentication/d' /etc/ssh/sshd_config
 				# Append what we need to end of file
 				echo "Replacing ChallengeResponseAuthentication"
-				sudo bash -c "ChallengeResponseAuthentication yes" >> /etc/ssh/sshd_config
+				echo "ChallengeResponseAuthentication yes" | sudo tee -a /etc/ssh/sshd_config
 			fi
 
 			# Check UseDNS parameter in /etc/ssh/sshd_config
@@ -133,7 +133,7 @@ if [ "$continue" = "yes" ]; then
 				sudo sed -i '/UseDNS/d' /etc/ssh/sshd_config
 				# Append what we need to end of file
 				echo "Replacing UseDNS"
-				sudo bash -c "UseDNS no" >> /etc/ssh/sshd_config
+				echo "UseDNS no" | sudo tee -a /etc/ssh/sshd_config
 			fi
 
 			# Configure /etc/pam.d/sshd
