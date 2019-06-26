@@ -30,7 +30,8 @@ if [ "$continue" = "y" ]; then
 	tar zxf ~/duo_unix-latest.tar.gz -C ~/
 
 	echo "Changing into duo_unix directory"
-	cd ~/duo_unix-*
+	duo_unix_directory=$(find ~/ -name "duo_unix-*" -type d)
+	cd $duo_unix_directory
 
 	# Build and install duo_unix with PAM support
 	if [ -d /lib64/security ]; then
