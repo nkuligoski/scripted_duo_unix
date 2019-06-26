@@ -251,7 +251,7 @@ if [ "$continue" = "yes" ]; then
 			sudo service sshd restart
 
 			# Configuring PAM with Duo
-			common_auth=`sudo grep pam_unix.so /etc/pam.d/sshd`
+			common_auth=`sudo grep pam_unix.so /etc/pam.d/common-auth`
 			if [ "$common_auth" = "auth	[success=1 default=ignore]	pam_unix.so nullok_secure" ]; then
 				echo "Configuring /etc/pam.d/sshd with pam_duo.so"
 				# Comment out: @include common-auth
