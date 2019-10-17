@@ -1,7 +1,21 @@
 #!/usr/bin/bash
 # Purpose: Assist administrators install Duo on CentOS and Ubuntu
 
-USAGE="Usage: $0 ikey skey api_host (auth_type)"
+USAGE="""Usage: $0 ikey skey api_host (auth_type)
+
+        Setup SSH behind Duo MFA.
+
+        required arguments:
+            ikey
+                    Duo Intergration Key
+            skey
+                    Duo Secret Key
+            api_host
+                    Duo API Endpoint
+
+        optional arguments:
+            auth_type [ public-key | password ]
+                    Type of authentication to use with SSH"""
 
 echo "This script will layer Duo on top of your public-key or password authentication"
 
