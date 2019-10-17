@@ -1,7 +1,7 @@
 #!/usr/bin/bash
 # Purpose: Assist administrators install Duo on CentOS and Ubuntu
 
-USAGE="Usage: $0 ikey skey api_host (install_args) (auth_type)"
+USAGE="Usage: $0 ikey skey api_host (auth_type)"
 
 echo "This script will layer Duo on top of your public-key or password authentication"
 
@@ -19,8 +19,7 @@ fi
 integration_key=$1
 secret_key=$2
 api_hostname=$3
-install_args=$4
-auth_type=$5
+auth_type=$4
 
 # Capture Operating System
 if [ lsb_release > /dev/null 2>&1 ]; then
@@ -38,13 +37,13 @@ fi
 
 if [[ "$os" =~ (16.04)+ ]]; then
 	echo "Calling 'ubuntu_duo' script with Duo keys"
-	bash systems/ubuntu_duo.sh $integration_key $secret_key $api_hostname $install_args $auth_type
+	bash systems/ubuntu_duo.sh $integration_key $secret_key $api_hostname $auth_type
 elif [[ "$os" =~ (18.04) ]]; then
 	echo "Calling 'ubuntu_duo' script with Duo keys"
-	bash systems/ubuntu_duo.sh $integration_key $secret_key $api_hostname $install_args $auth_type
+	bash systems/ubuntu_duo.sh $integration_key $secret_key $api_hostname $auth_type
 elif [[ "$os" =~ (CentOS) ]] || [[ "$os" =~ (Amazon Linux) ]]; then
         echo "Call 'centos_duo' script"
-        bash systems/centos_duo.sh $integration_key $secret_key $api_hostname $install_args $auth_type
+        bash systems/centos_duo.sh $integration_key $secret_key $api_hostname $auth_type
 else
         echo "Couldn't match on an OS"
 fi
