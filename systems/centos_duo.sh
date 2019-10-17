@@ -4,18 +4,19 @@
 echo "Integration key: $1"
 echo "Secret key: $2"
 echo "API Hostname: $3"
-
-echo "Would you like to continue? [yes/no]"
-read continue
+echo "Install arguements: '$4'"
+if [ "$5" != "" ]; then
+	echo "Authentication Type: $5"
+fi
 
 if [ "$continue" = "yes" ]; then
 	# Update apt repos
-	sudo yum update
+	sudo yum update $4
 
 	# Install pam_duo prerequisites
 	echo "Installing pam_duo prerequisites"
 	# sudo apt install libssl-dev libpam-dev build-essential
-	sudo yum install openssl-devel pam-devel gcc
+	sudo yum install openssl-devel pam-devel gcc $5
 
 	# Download and extract the latest version of duo_unix
 	# Check to see if this has already been downloaded (assumes home folder)
@@ -65,7 +66,12 @@ if [ "$continue" = "yes" ]; then
 	while true; do
 
 		echo "Do you currently leverage public-key or password authentication? [public-key/password]"
-		read authentication
+		if [ "$5" != "" ]; then
+			echo "$5"
+			authentication=$5
+		else
+			read authentication
+		fi
 
 		if [ "$authentication" = "public-key" ]; then
 			echo "Configuring machine for public-key + Duo"

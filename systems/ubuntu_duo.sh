@@ -5,17 +5,15 @@
 echo "Integration key: $1"
 echo "Secret key: $2"
 echo "API Hostname: $3"
-
-echo "Would you like to continue? [y/n]"
-read continue
+echo "Install arguements: '$4'"
 
 if [ "$continue" = "y" ]; then
 	# Update apt repos
-	sudo apt update
+	sudo apt update $4
 
 	# Install pam_duo prerequisites
 	echo "Installing pam_duo prerequisites"
-	sudo apt install -y libssl-dev libpam-dev build-essential
+	sudo apt install -y libssl-dev libpam-dev build-essential $4
 
 	# Download and extract the latest version of duo_unix
 	# Check to see if this has already been downloaded (assumes home folder)
