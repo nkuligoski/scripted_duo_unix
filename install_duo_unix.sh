@@ -1,7 +1,21 @@
 #!/usr/bin/bash
 # Purpose: Assist administrators install Duo on CentOS and Ubuntu
 
-USAGE="Usage: $0 ikey skey api_host"
+USAGE="""Usage: $0 ikey skey api_host (auth_type)
+
+        Setup SSH behind Duo MFA.
+
+        required arguments:
+            ikey
+                    Duo Intergration Key
+            skey
+                    Duo Secret Key
+            api_host
+                    Duo API Endpoint
+
+        optional arguments:
+            auth_type [ public-key | password ]
+                    Type of authentication to use with SSH"""
 
 echo "This script will layer Duo on top of your public-key or password authentication"
 
@@ -19,6 +33,7 @@ fi
 integration_key=$1
 secret_key=$2
 api_hostname=$3
+auth_type=$4
 
 # Capture Operating System
 if [ lsb_release > /dev/null 2>&1 ]; then
@@ -36,13 +51,13 @@ fi
 
 if [[ "$os" =~ (16.04)+ ]]; then
 	echo "Calling 'ubuntu_duo' script with Duo keys"
-	bash systems/ubuntu_duo.sh $integration_key $secret_key $api_hostname
+	bash systems/ubuntu_duo.sh $integration_key $secret_key $api_hostname $auth_type
 elif [[ "$os" =~ (18.04) ]]; then
 	echo "Calling 'ubuntu_duo' script with Duo keys"
-	bash systems/ubuntu_duo.sh $integration_key $secret_key $api_hostname
-elif [[ "$os" =~ (CentOS) ]]; then
+	bash systems/ubuntu_duo.sh $integration_key $secret_key $api_hostname $auth_type
+elif [[ "$os" =~ (CentOS) ]] || [[ "$os" =~ (Amazon Linux) ]]; then
         echo "Call 'centos_duo' script"
-        bash systems/centos_duo.sh $integration_key $secret_key $api_hostname
+        bash systems/centos_duo.sh $integration_key $secret_key $api_hostname $auth_type
 else
         echo "Couldn't match on an OS"
 fi
